@@ -1,0 +1,117 @@
+package org.fourtran.fourtranmc;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import org.bukkit.Location;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.jetbrains.annotations.NotNull;
+import org.spigotmc.event.player.PlayerSpawnLocationEvent;
+
+public class PointOfInterest implements Listener, CommandExecutor {
+
+    private final FourtranMC plugin;
+
+    public PointOfInterest(FourtranMC instance) {
+        this.plugin = instance;
+
+    }
+
+    public enum Locations {
+
+        SPAWN("welcome to spawn. where it all begins.", 130, 92, 0, -179, 0),
+        GRAVE("grave of what could've been", 210, 86, -56, -91, -33),
+        TEMPLE("an imperfect monument to imperfect people", 186, 82, -252, -180, -23),
+        CASTLE("her majesty's residence.", 149, 120, -285, 153, -26),
+        ALTY("§dalty§f. dont cry.", 181, 80, -106, -100, -30),
+        ILYSM("i §dlove§f u so much.", 16.492, 102, -390.786, -179, 34),
+        THERAPY("you need this.", 154, 105, -324, -89, 0),
+        BEAR("bear", 206, 205, -243, -84, -21),
+        SPLEEF("spleef arena, ig.", 170, -1, -138, 0, 3),
+        TRANNYWOOD("chase the fame.", 183, 85, -218, -45, -13);
+
+        public final String msg;
+        public final double x;
+        public final double y;
+        public final double z;
+        public final float pitch;
+        public final float yaw;
+
+        Locations(String msg, double x, double y, double z, float pitch, float yaw) {
+            this.msg = msg;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.pitch = pitch;
+            this.yaw = yaw;
+        }
+
+        public Location getLoc(Player p) {
+            return new Location(p.getWorld(), x, y, z, pitch, yaw);
+        }
+
+        public void tp(Player p) {
+            p.teleport(getLoc(p));
+            p.sendMessage(msg);
+        }
+
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onPlayerSpawn(PlayerSpawnLocationEvent event) {
+        Player p = event.getPlayer();
+
+        if (!p.hasPlayedBefore()) {
+            Locations.SPAWN.tp(p);
+            plugin.getServer().sendMessage(Component.text("welcome to 4tran §a" + p.getName()));
+        }
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player)) {
+            return false;
+        }
+        Player p = (Player) sender;
+
+        if (!p.getWorld().getName().equals("world")) {
+            p.sendMessage("only available in the overworld!");
+            return false;
+        }
+
+        if (args.length < 1 || args[0].isEmpty()) {
+            Locations.SPAWN.tp(p);
+            return true;
+        }
+
+        Locations chosenLocation;
+        try {
+            chosenLocation = Locations.valueOf(args[0].toUpperCase());
+            chosenLocation.tp(p);
+            return true;
+        } catch (IllegalArgumentException e) {
+            if (args[0].equalsIgnoreCase("list")) {
+                Component locations = Component.text("");
+
+                for (Locations l : Locations.values()) {
+                    locations = locations.append(
+                            Component.text(l.name() + "§7, §f")
+                                    .hoverEvent(Component.text(l.msg))
+                                    .clickEvent(ClickEvent.runCommand("poi " + l.name()))
+                    );
+                }
+
+                p.sendMessage(locations);
+                return true;
+            }
+
+            p.sendMessage("cant find point of interest named " + args[0] + ". run '/poi list' for the complete list.");
+            return false;
+        }
+    }
+}

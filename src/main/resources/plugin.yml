@@ -1,0 +1,33 @@
+name: 4tran-minecraft-server
+version: '${project.version}'
+main: org.fourtran.fourtranmc.FourtranMC
+api-version: 1.20
+prefix: 4tran
+authors: [ Lydees ]
+description: Plugin for 4tran's minecraft server
+website: 4tran.org
+
+commands:
+  prefix:
+    description: "give yourself a prefix"
+  pointofinterest:
+    description: "take me to some place cool"
+    aliases:
+      - "poi"
+      - "warp"
+      - "spawn"
+      - "takemeto"
+  endo:
+    description: "endocrynologist report"
+    aliases:
+      - "endocrinology"
+  redditrelay:
+    description: "enable or disable the reddit feed relay"
+  discord:
+    description: "get the discord invite link"
+  discordinvisible:
+    description: "make yourself invisible from discord chat logs"
+  discordvisible:
+    description: "make yourself visible from discord chat logs"
+  discordrelay:
+    description: "enable or disable the discord chat relay"
