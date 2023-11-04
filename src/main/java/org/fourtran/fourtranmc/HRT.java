@@ -135,7 +135,7 @@ public class HRT implements Listener, CommandExecutor {
         return r;
     }
 
-    public void sendEndocrinologyReport(Player receiver, String target) {
+    public String sendEndocrinologyReport(Player receiver, String target) {
         UUID targetUUID = Bukkit.getOfflinePlayer(target).getUniqueId();
 
         int[] hrtProfile = updateHRTprofile(targetUUID);
@@ -179,6 +179,12 @@ public class HRT implements Listener, CommandExecutor {
                         .append(Component.text("§3Testosterone§7: ....... §f" + T)).appendNewline().appendNewline()
                         .append(Component.text("§7Result: " + finalResult))
         );
+
+        if (target.equalsIgnoreCase(receiver.getName())) {
+            receiver.playerListName(Component.text(finalResult + "§f " + receiver.getName()));
+        }
+
+        return finalResult;
     }
 
     public Gender getGender(String player) {

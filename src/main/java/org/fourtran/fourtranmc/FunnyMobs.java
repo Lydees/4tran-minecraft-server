@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,16 +24,20 @@ public class FunnyMobs implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onMobSpawn(EntitySpawnEvent event) {
-        Entity e = event.getEntity();
+        if (!(event.getEntity() instanceof LivingEntity)) return;
+
+        LivingEntity e = (LivingEntity) event.getEntity();
         EntityType etype = event.getEntityType();
 
         e.setCustomNameVisible(true);
         switch (etype) {
             case SKELETON:
                 e.customName(Component.text("TERF"));
+                //e.getEquipment().setHelmet(new ItemStack(Material.JACK_O_LANTERN));
                 break;
             case ZOMBIE:
                 e.customName(Component.text("CHASER"));
+                //e.getEquipment().setHelmet(new ItemStack(Material.JACK_O_LANTERN));
                 break;
             case CREEPER:
                 e.customName(Component.text("JOHN 50"));
