@@ -33,11 +33,17 @@ public class FunnyMobs implements Listener {
         switch (etype) {
             case SKELETON:
                 e.customName(Component.text("TERF"));
-                //e.getEquipment().setHelmet(new ItemStack(Material.JACK_O_LANTERN));
+
+                if (Utils.isHalloween())
+                    e.getEquipment().setHelmet(new ItemStack(Material.JACK_O_LANTERN));
+
                 break;
             case ZOMBIE:
                 e.customName(Component.text("CHASER"));
-                //e.getEquipment().setHelmet(new ItemStack(Material.JACK_O_LANTERN));
+
+                if (Utils.isHalloween())
+                    e.getEquipment().setHelmet(new ItemStack(Material.JACK_O_LANTERN));
+
                 break;
             case CREEPER:
                 e.customName(Component.text("JOHN 50"));

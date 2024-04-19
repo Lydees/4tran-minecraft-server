@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -95,6 +96,13 @@ public class HRT implements Listener, CommandExecutor {
     public void onPlayerLeave(PlayerQuitEvent event) {
         UUID player = Bukkit.getOfflinePlayer(event.getPlayer().getName()).getUniqueId();
         updateHRTprofile(player);
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        UUID player = Bukkit.getOfflinePlayer(event.getPlayer().getName()).getUniqueId();
+        updateHRTprofile(player);
+        sendEndocrinologyReport(event.getPlayer(), event.getPlayer().getName());
     }
 
     public void setEstrogen(UUID player, int amount) {
@@ -193,9 +201,7 @@ public class HRT implements Listener, CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player)) {
-            return false;
-        }
+        if (!(sender instanceof Player)) return false;
         Player p = (Player) sender;
 
         String target;

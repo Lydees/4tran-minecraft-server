@@ -12,11 +12,11 @@ import org.bukkit.WeatherType;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
@@ -38,7 +38,7 @@ public class PointOfInterest implements Listener, CommandExecutor {
         ALTY("§dalty§f. dont cry.", 181, 80, -106, -100, -30),
         ILYSM("i §dlove§f u so much.", 16.492, 102, -390.786, -179, 34),
         THERAPY("you need this.", 154, 105, -324, -89, 0),
-        BEAR("bear", 206, 205, -243, -84, -21),
+        BEAR("mogs me", 206, 205, -243, -84, -21),
         SPLEEF("spleef arena, ig.", 170, -1, -138, 0, 3),
         ARENA("fight to the §cdeath§f.", 138.991, 46, -346.985, 0, -3),
         ARMORY("arm yourself.", 138.991, 102, -303.561, 0, 2),
@@ -46,6 +46,7 @@ public class PointOfInterest implements Listener, CommandExecutor {
         CUTE_HOUSE("§dvi§f and §dsarah§f's house", 299, 120, -341, 0, -3),
         MANSION("livin' the good life", 256, 120, 204, 90, 6),
         PLOT("vi's plot. i wonder what she's working on...", 20, 125, -298, 85, -2),
+        SURVIVAL("survival area. §cNO CREATIVE ALLOWED", -241, 121, -72, -179, 41),
         TRANNYWOOD("chase the fame.", 183, 85, -218, -45, -13);
 
         public final String msg;
@@ -84,23 +85,23 @@ public class PointOfInterest implements Listener, CommandExecutor {
             plugin.getServer().sendMessage(Component.text("welcome to 4tran §a" + p.getName()));
         }
 
-        // halloween sequence
-        /*
-        p.getWorld().strikeLightning(p.getLocation());
-        new Thread(() -> {
-            p.setPlayerWeather(WeatherType.DOWNFALL);
-            p.setPlayerTime(18000, false);
-            tempWait(1500);
-            p.showElderGuardian(true);
-            p.playSound(p.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1.0F, 0.5F);
+        if (Utils.isHalloween()) {
+            // halloween sequence
+            p.getWorld().strikeLightning(p.getLocation());
+            new Thread(() -> {
+                p.setPlayerWeather(WeatherType.DOWNFALL);
+                p.setPlayerTime(18000, false);
+                tempWait(1500);
+                p.showElderGuardian(true);
+                p.playSound(p.getLocation(), Sound.ENTITY_ELDER_GUARDIAN_CURSE, 1.0F, 0.5F);
 
-            p.sendTitle(new Title("§6§lHappy Halloween!", "§c\uD83C\uDF83", 10, 100, 20));
+                p.sendTitle(new Title("§6§lHappy Halloween!", "§c\uD83C\uDF83", 10, 100, 20));
 
-            tempWait(5000);
-            p.resetPlayerWeather();
-            p.resetPlayerTime();
-        }).start();
-        */
+                tempWait(5000);
+                p.resetPlayerWeather();
+                p.resetPlayerTime();
+            }).start();
+        }
     }
 
     private void tempWait(long t) {
@@ -113,9 +114,7 @@ public class PointOfInterest implements Listener, CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player)) {
-            return false;
-        }
+        if (!(sender instanceof Player)) return false;
         Player p = (Player) sender;
 
         if (!p.getWorld().getName().equals("world")) {

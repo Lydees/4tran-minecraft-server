@@ -53,6 +53,7 @@ public class RedditRelay implements CommandExecutor  {
     }
 
     public void startListeningForNewPosts() {
+        plugin.getServer().getAsyncScheduler().runNow(plugin, (task) -> {});
         plugin.getServer().getAsyncScheduler().runAtFixedRate(plugin, (scheduledTask) -> {
             if (enabled) {
                 checkForNewSubmission("4tran4");

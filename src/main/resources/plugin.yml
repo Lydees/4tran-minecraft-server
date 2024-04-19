@@ -31,3 +31,5 @@ commands:
     description: "make yourself visible from discord chat logs"
   discordrelay:
     description: "enable or disable the discord chat relay"
+  survival:
+    description: "enable or disable the survival gameplay mode"
